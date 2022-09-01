@@ -12,6 +12,6 @@
     "patterns":["Show my todo","What are ny todo","What is on my todo list"],
     "responses":[""]},
     {"tag":"exit" ,
-    "patterns":["Bye","Stop","auit","I want to Quit","Goodbye","I want to exit","I have to go"],
+    "patterns":["Bye","Stop","Quit","I want to quit","Goodbye","I want to exit","I have to go"],
     "responses":[""]}
 ]}
