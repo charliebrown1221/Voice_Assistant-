@@ -52,7 +52,7 @@ def create_note():
 
 def add_todo():
     global recognizer
-    speaker.say("What todo do you want to add?")
+    speaker.say("What to do do you want to add?")
     speaker.runAndWait()
     
     done = False 
@@ -67,6 +67,15 @@ def add_todo():
                 
                 todo_list.append(item)
                 
+                done =True
+                
+                speaker.say(f"I added item to the to do list")
+                speaker.runAndWait()
+                
+        except speech_recognition.UnknownValueError:
+            recognizer = speech_recognition.Recognizer()
+            speaker.say = ("I did not understand you! Please try again!")
+            speaker.runAndWait()        
                 
     
     
