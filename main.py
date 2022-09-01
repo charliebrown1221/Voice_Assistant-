@@ -1,5 +1,4 @@
 
-from fileinput import filename
 from neuralintents import GenericAssistant
 import speech_recognition
 import pyttsx3 as tts
@@ -38,7 +37,7 @@ def create_note():
                 filename = recognizer.recognize_google(audio)
                 filename = filename.lower()
                 
-            with open(filename, 'W') as f:
+            with open(filename, 'w') as f:
                 f.write(note)
                 done = True
                 speaker.say(f"iI successfully created the note {filename}")
@@ -76,12 +75,44 @@ def add_todo():
             recognizer = speech_recognition.Recognizer()
             speaker.say = ("I did not understand you! Please try again!")
             speaker.runAndWait()        
+            
+            
+def show_todos():
+    speaker.say("The items on your todo list are the following")
+    for item in todo_list:
+        speaker.say(item)
+    speaker.runAndWait()    
                 
     
+def hello():
+    speaker.say("Hello What can i do for you.")
+    speaker.runAndWait()
     
+    
+def quit(): 
+    speaker.say("Bye")
+    speaker.runAndWait()
+    sys.exit(0)
 
+mappings ={"greeting":hello,
+           "create_note": create_note,
+           "add_todo": add_todo,
+           "show_todos" :show_todos,
+           "exit" : quit
+    
+}
 
-
-assistant = GenericAssistant('intents.json')
+assistant = GenericAssistant('intents.json' , intent_methods=mappings)
 assistant.train_model()
 
+while True:
+    try:
+        with speech_recognition.Microphone() as mic:
+            recognizer.adjust_for_ambient_noise(mic, duration=0.2)
+            audio = recognizer.listen(mic)
+            
+            message =recognizer.recognize_google(audio)
+            message = message.lower()
+        assistant.request(message)    
+    except speech_recognition.UnknownValueError:
+        recognizer = speech_recognition.Recognizer()
